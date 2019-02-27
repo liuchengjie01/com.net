@@ -38,26 +38,33 @@ public class NetRunnable implements Runnable{
 		try {
 			p = Runtime.getRuntime().exec(cmd);
 			BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			while((str = br.readLine()) != null){
-				if(str.contains("平均")){
-					String str1 = str.substring(str.indexOf("平均"), str.length());
-					String str2 = str1.substring(str1.indexOf("平均")+5, str1.indexOf("ms"));
-					time = Integer.parseInt(str2);
-//					System.out.println(str2);
-				}
-				if(!tmp && str.contains("字节=")){
-					tmp = true;
-					String str1 = str.substring(str.indexOf("字节=")+3, str.indexOf(" 时间"));
-					data = Integer.parseInt(str1);
-				}
-//				System.out.println("时间是："+time+"\n");
-//				System.out.println("数据大小是： "+data+"\n");
-				jta.append(str+"\n");
-				System.out.println(str);
-			}
-			datawidth = ((data*16000)/time);
 			
-			jta.append("带宽为: "+datawidth+" bps\n");
+			if(cmd.contains("ping")){
+				while((str = br.readLine()) != null){
+					if(str.contains("平均")){
+						String str1 = str.substring(str.indexOf("平均"), str.length());
+						String str2 = str1.substring(str1.indexOf("平均")+5, str1.indexOf("ms"));
+						time = Integer.parseInt(str2);
+//						System.out.println(str2);
+					}
+					if(!tmp && str.contains("字节=")){
+						tmp = true;
+						String str1 = str.substring(str.indexOf("字节=")+3, str.indexOf(" 时间"));
+						data = Integer.parseInt(str1);
+					}
+//					System.out.println("时间是："+time+"\n");
+//					System.out.println("数据大小是： "+data+"\n");
+					jta.append(str+"\n");
+					System.out.println(str);
+				}
+				datawidth = ((data*16000)/time);
+				jta.append("带宽为: "+datawidth+" bps\n");
+			} else {
+				while((str = br.readLine()) != null){
+					jta.append(str+"\n");
+					System.out.println(str);
+				}
+			}
 			br.close();
 			p.destroy();
 		} catch (IOException e) {
