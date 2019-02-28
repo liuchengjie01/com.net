@@ -13,7 +13,7 @@ public class NetRunnable implements Runnable{
 	private Process p;
 	private String tracert = "tracert -h 100 ";
 //	private String url = "http://www.ip138.com/";
-	private String ping = "ping ";
+	private String ping = "ping -n 100 ";
 	private String s;
 	public NetRunnable(JTextArea jta, JTextField jtf, String s){
 		this.jta = jta;
