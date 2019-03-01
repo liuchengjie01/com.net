@@ -3,6 +3,8 @@ package com.net;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -35,36 +37,42 @@ public class NetRunnable implements Runnable{
 		int time = 0;
 		int data = 0;
 		double datawidth = 0;
+		String[] args = null;
 		try {
-			p = Runtime.getRuntime().exec(cmd);
+			if(s.contains("ping")){
+				args = new String[]{"python", "E:Java_work/Test/src/com/net/pingtest.py", text};
+			} else if(s.contains("tracert")){
+				args = new String[]{"python", "tr", text};
+			}
+			p = Runtime.getRuntime().exec(args);
 			BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			
-			if(cmd.contains("ping")){
-				while((str = br.readLine()) != null){
-					if(str.contains("平均")){
-						String str1 = str.substring(str.indexOf("平均"), str.length());
-						String str2 = str1.substring(str1.indexOf("平均")+5, str1.indexOf("ms"));
-						time = Integer.parseInt(str2);
-//						System.out.println(str2);
-					}
-					if(!tmp && str.contains("字节=")){
-						tmp = true;
-						String str1 = str.substring(str.indexOf("字节=")+3, str.indexOf(" 时间"));
-						data = Integer.parseInt(str1);
-					}
-//					System.out.println("时间是："+time+"\n");
-//					System.out.println("数据大小是： "+data+"\n");
-					jta.append(str+"\n");
-					System.out.println(str);
-				}
-				datawidth = ((data*16000)/time);
-				jta.append("带宽为: "+datawidth+" bps\n");
-			} else {
-				while((str = br.readLine()) != null){
-					jta.append(str+"\n");
-					System.out.println(str);
-				}
-			}
+//			if(cmd.contains("ping")){
+//				while((str = br.readLine()) != null){
+//					if(str.contains("平均")){
+//						String str1 = str.substring(str.indexOf("平均"), str.length());
+//						String str2 = str1.substring(str1.indexOf("平均")+5, str1.indexOf("ms"));
+//						time = Integer.parseInt(str2);
+////						System.out.println(str2);
+//					}
+//					if(!tmp && str.contains("字节=")){
+//						tmp = true;
+//						String str1 = str.substring(str.indexOf("字节=")+3, str.indexOf(" 时间"));
+//						data = Integer.parseInt(str1);
+//					}
+////					System.out.println("时间是："+time+"\n");
+////					System.out.println("数据大小是： "+data+"\n");
+//					jta.append(str+"\n");
+//					System.out.println(str);
+//				}
+//				datawidth = ((data*16000)/time);
+//				jta.append("带宽为: "+datawidth+" bps\n");
+//			} else {
+//				while((str = br.readLine()) != null){
+//					jta.append(str+"\n");
+//					System.out.println(str);
+//				}
+//			}
 			br.close();
 			p.destroy();
 		} catch (IOException e) {
@@ -72,4 +80,15 @@ public class NetRunnable implements Runnable{
 			e.printStackTrace();
 		}	
 	}
+	
+//	public String getRes(){
+//		
+//		URL url = null;
+//		HttpURLConnection con = null;
+//		try{
+//			url = new URL()
+//		}catch(IOException e){
+//			e.printStackTrace();
+//		}
+//	}
 }
