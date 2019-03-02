@@ -3,6 +3,7 @@ package com.net;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -45,10 +46,13 @@ public class NetRunnable implements Runnable{
 				args = new String[]{"python", "tr", text};
 			}
 			p = Runtime.getRuntime().exec(args);
-			BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			
+			LineNumberReader lnr = new LineNumberReader(new InputStreamReader(p.getInputStream()));
+			while((str = lnr.readLine()) != null){
+				jta.append(str+"\n");
+				System.out.println(str);
+			}
 //			if(cmd.contains("ping")){
-//				while((str = br.readLine()) != null){
+//				while((str = lnr.readLine()) != null){
 //					if(str.contains("平均")){
 //						String str1 = str.substring(str.indexOf("平均"), str.length());
 //						String str2 = str1.substring(str1.indexOf("平均")+5, str1.indexOf("ms"));
@@ -68,12 +72,12 @@ public class NetRunnable implements Runnable{
 //				datawidth = ((data*16000)/time);
 //				jta.append("带宽为: "+datawidth+" bps\n");
 //			} else {
-//				while((str = br.readLine()) != null){
+//				while((str = lnr.readLine()) != null){
 //					jta.append(str+"\n");
 //					System.out.println(str);
 //				}
 //			}
-			br.close();
+			lnr.close();
 			p.destroy();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
